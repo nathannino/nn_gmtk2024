@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2aucu3wteib1"]
+
+[ext_resource type="Texture2D" uid="uid://dmtcsgv7k2w2n" path="res://pixelmora/wall.png" id="1_25bq3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_48fik"]
+size = Vector2(16, 16)
+
+[node name="platformer_block" type="StaticBody2D"]
+
+[node name="Wall" type="Sprite2D" parent="."]
+texture = ExtResource("1_25bq3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_48fik")

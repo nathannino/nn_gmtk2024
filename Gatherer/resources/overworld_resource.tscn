@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgq2tnkploehl"]
+
+[ext_resource type="Script" path="res://Gatherer/resources/overworld_resource.gd" id="1_ek3h0"]
+[ext_resource type="Script" path="res://Gatherer/resources/ResourceCollision.gd" id="2_coc86"]
+
+[node name="overworld_resource" type="Node2D"]
+script = ExtResource("1_ek3h0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="Area2D" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("2_coc86")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="gmtk_overworld_tool" load_steps=3 format=3 uid="uid://bfq0i1ic0ipax"]
+
+[ext_resource type="Script" path="res://Ressources/overworld/overworld_tools.gd" id="1_wgq36"]
+[ext_resource type="Texture2D" uid="uid://chnxcwohyhwge" path="res://pixelmora/axe.png" id="2_rjsp4"]
+
+[resource]
+script = ExtResource("1_wgq36")
+sprite = ExtResource("2_rjsp4")
+position_offset = Vector2(0, -8)
+endless = true
+type = 0

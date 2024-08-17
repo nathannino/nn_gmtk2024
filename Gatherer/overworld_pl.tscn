@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://bsofnje4va3y7"]
+
+[ext_resource type="Texture2D" uid="uid://cfsvjc5hvokw7" path="res://pixelmora/player.png" id="1_plbri"]
+[ext_resource type="Script" path="res://Gatherer/overworld_pl.gd" id="1_y7oe5"]
+[ext_resource type="Texture2D" uid="uid://chnxcwohyhwge" path="res://pixelmora/axe.png" id="3_dd8gr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0kbbd"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3syds"]
+size = Vector2(19, 18)
+
+[node name="overworld_pl" type="CharacterBody2D" node_paths=PackedStringArray("tool", "toolAnchor")]
+script = ExtResource("1_y7oe5")
+tool = NodePath("Tool_anchor/Tool")
+toolAnchor = NodePath("Tool_anchor")
+
+[node name="Player" type="Sprite2D" parent="."]
+texture = ExtResource("1_plbri")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_0kbbd")
+
+[node name="Tool_anchor" type="Node2D" parent="."]
+position = Vector2(0, -8)
+
+[node name="Tool" type="Area2D" parent="Tool_anchor"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="Tool_anchor/Tool"]
+position = Vector2(0, -8)
+texture = ExtResource("3_dd8gr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tool_anchor/Tool"]
+position = Vector2(-0.5, -9)
+shape = SubResource("RectangleShape2D_3syds")
+
+[connection signal="body_entered" from="Tool_anchor/Tool" to="." method="_on_tool_body_entered"]
+[connection signal="item_rect_changed" from="Tool_anchor/Tool/Sprite2D" to="." method="_on_sprite_2d_item_rect_changed"]

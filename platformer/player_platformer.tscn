@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://lay38efo5186"]
+
+[ext_resource type="Script" path="res://platformer/player_platformer.gd" id="1_3uwpn"]
+[ext_resource type="Texture2D" uid="uid://cfsvjc5hvokw7" path="res://pixelmora/player.png" id="1_v78yc"]
+[ext_resource type="Resource" uid="uid://ctb5w6yx2h641" path="res://Ressources/res_block.tres" id="2_myahm"]
+[ext_resource type="PackedScene" uid="uid://d2u3el8g15man" path="res://platformer/tools/pl_tool_preview.tscn" id="3_vehus"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ouuo"]
+size = Vector2(16, 16)
+
+[node name="Player_platformer" type="CharacterBody2D" node_paths=PackedStringArray("pos_left", "pos_right")]
+script = ExtResource("1_3uwpn")
+debug_block = ExtResource("2_myahm")
+pos_left = NodePath("pl_left")
+pos_right = NodePath("pl_right")
+
+[node name="Player" type="Sprite2D" parent="."]
+texture = ExtResource("1_v78yc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_4ouuo")
+
+[node name="pl_tool_preview" parent="." instance=ExtResource("3_vehus")]
+
+[node name="pl_left" type="Node2D" parent="."]
+position = Vector2(-8, 0)
+
+[node name="pl_right" type="Node2D" parent="."]
+position = Vector2(8, 0)

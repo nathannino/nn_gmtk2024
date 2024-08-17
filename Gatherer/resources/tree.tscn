@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://cvd68b2ucpljs"]
+
+[ext_resource type="PackedScene" uid="uid://bgq2tnkploehl" path="res://Gatherer/resources/overworld_resource.tscn" id="1_t0ov0"]
+[ext_resource type="Texture2D" uid="uid://efhtln67ldsf" path="res://pixelmora/tree.png" id="2_vm38m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cb883"]
+size = Vector2(11.995, 6.87)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ecnwy"]
+
+[node name="Tree" type="Node2D"]
+
+[node name="overworld_resource" parent="." instance=ExtResource("1_t0ov0")]
+collision_shape = SubResource("RectangleShape2D_cb883")
+extract_range = SubResource("CircleShape2D_ecnwy")
+sprite = ExtResource("2_vm38m")
+offset = Vector2(0.55, -12.38)
+life = 3
