@@ -11,6 +11,8 @@ var tool_preview
 @export var pos_right : Node2D
 @export var toplevel_scene : Node
 
+signal switch_mode(p_mode : Constants.horrible_idea)
+
 func _ready():
 	tool_preview = $pl_tool_preview
 	
@@ -58,3 +60,7 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	move_and_slide()
+	
+	
+	if global_position.x < 0 :
+		switch_mode.emit(Constants.horrible_idea.GATHERER)

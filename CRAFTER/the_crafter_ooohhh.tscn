@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://wmj3awa7akrv"]
+
+[ext_resource type="Script" path="res://CRAFTER/the_crafter_ooohhh.gd" id="1_li7b3"]
+
+[node name="TheCrafterOOOHHH" type="Control" node_paths=PackedStringArray("recepies_list")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_li7b3")
+recepies_list = NodePath("Recipes")
+
+[node name="Recipes" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 22.225
+offset_right = 40.0
+offset_bottom = 62.225
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "The crafter ooohhhhh spoooooookyyyyy"

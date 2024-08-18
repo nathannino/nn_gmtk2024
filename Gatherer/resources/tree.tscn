@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cvd68b2ucpljs"]
+[gd_scene load_steps=6 format=3 uid="uid://cvd68b2ucpljs"]
 
 [ext_resource type="PackedScene" uid="uid://bgq2tnkploehl" path="res://Gatherer/resources/overworld_resource.tscn" id="1_t0ov0"]
 [ext_resource type="Texture2D" uid="uid://efhtln67ldsf" path="res://pixelmora/tree.png" id="2_vm38m"]
+[ext_resource type="Resource" uid="uid://c1clq66t6k1v2" path="res://Ressources/overworld_drops/wood.tres" id="3_wqpb8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cb883"]
 size = Vector2(11.995, 6.87)
@@ -16,3 +17,4 @@ extract_range = SubResource("CircleShape2D_ecnwy")
 sprite = ExtResource("2_vm38m")
 offset = Vector2(0.55, -12.38)
 life = 3
+drop = ExtResource("3_wqpb8")

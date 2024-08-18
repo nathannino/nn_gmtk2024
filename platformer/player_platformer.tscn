@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://platformer/player_platformer.gd" id="1_3uwpn"]
 [ext_resource type="Texture2D" uid="uid://cfsvjc5hvokw7" path="res://pixelmora/player.png" id="1_v78yc"]
-[ext_resource type="Resource" uid="uid://ctb5w6yx2h641" path="res://Ressources/res_block.tres" id="2_myahm"]
+[ext_resource type="Resource" uid="uid://ctb5w6yx2h641" path="res://Ressources/platformer_tools/res_block.tres" id="2_myahm"]
 [ext_resource type="PackedScene" uid="uid://d2u3el8g15man" path="res://platformer/tools/pl_tool_preview.tscn" id="3_vehus"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ouuo"]

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="gmtk_overworld_drops" load_steps=3 format=3 uid="uid://c1clq66t6k1v2"]
+
+[ext_resource type="Script" path="res://Ressources/overworld_drops/overworld_resources.gd" id="1_lr3a5"]
+[ext_resource type="Texture2D" uid="uid://dqfvobsua2xan" path="res://pixelmora/ressource.png" id="2_0g705"]
+
+[resource]
+script = ExtResource("1_lr3a5")
+name = "Wood"
+sprite = ExtResource("2_0g705")

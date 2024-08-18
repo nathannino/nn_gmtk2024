@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="gmtk_crafting_recipes" load_steps=4 format=3 uid="uid://camfnl4a4ggqa"]
+
+[ext_resource type="Resource" uid="uid://ctb5w6yx2h641" path="res://Ressources/platformer_tools/res_block.tres" id="1_kbmiw"]
+[ext_resource type="Resource" uid="uid://c1clq66t6k1v2" path="res://Ressources/overworld_drops/wood.tres" id="1_rjsih"]
+[ext_resource type="Script" path="res://Ressources/overworld_crafting/crafting_recipies.gd" id="1_w15i3"]
+
+[resource]
+script = ExtResource("1_w15i3")
+result = ExtResource("1_kbmiw")
+components = Array[Resource("res://Ressources/overworld_drops/overworld_resources.gd")]([ExtResource("1_rjsih")])

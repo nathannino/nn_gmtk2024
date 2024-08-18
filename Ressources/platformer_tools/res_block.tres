@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="gmtk_tool" load_steps=4 format=3 uid="uid://ctb5w6yx2h641"]
 
 [ext_resource type="PackedScene" uid="uid://b2aucu3wteib1" path="res://platformer/tools/platformer_block.tscn" id="1_1tlgd"]
-[ext_resource type="Script" path="res://Ressources/tools.gd" id="1_fwyrf"]
+[ext_resource type="Script" path="res://Ressources/platformer_tools/tools.gd" id="1_fwyrf"]
 [ext_resource type="Texture2D" uid="uid://dmtcsgv7k2w2n" path="res://pixelmora/wall.png" id="2_2nbxh"]
 
 [resource]
@@ -9,3 +9,5 @@ script = ExtResource("1_fwyrf")
 sprite = ExtResource("2_2nbxh")
 position_offset = Vector2(8, 0)
 scene = ExtResource("1_1tlgd")
+weight = 1
+name = "Block"

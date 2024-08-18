@@ -11,6 +11,8 @@ size = Vector2(16, 16)
 size = Vector2(19, 18)
 
 [node name="overworld_pl" type="CharacterBody2D" node_paths=PackedStringArray("tool", "toolAnchor")]
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("1_y7oe5")
 tool = NodePath("Tool_anchor/Tool")
 toolAnchor = NodePath("Tool_anchor")
@@ -22,9 +24,9 @@ texture = ExtResource("1_plbri")
 shape = SubResource("RectangleShape2D_0kbbd")
 
 [node name="Tool_anchor" type="Node2D" parent="."]
-position = Vector2(0, -8)
 
 [node name="Tool" type="Area2D" parent="Tool_anchor"]
+position = Vector2(0, -8)
 collision_layer = 2
 collision_mask = 2
 

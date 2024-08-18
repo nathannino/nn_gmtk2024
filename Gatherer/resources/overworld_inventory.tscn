@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://d37x56h4fida0"]
+
+[ext_resource type="Script" path="res://Gatherer/resources/overworld_inventory.gd" id="1_cm1w1"]
+[ext_resource type="PackedScene" uid="uid://drtx2pscupfyt" path="res://Gatherer/overworld.tscn" id="2_2cdwx"]
+[ext_resource type="PackedScene" uid="uid://c773do7yhtxoj" path="res://Gatherer/inventory.tscn" id="3_usaha"]
+[ext_resource type="PackedScene" uid="uid://bl8iqbr5e05ib" path="res://platformer/test_level.tscn" id="4_f86gf"]
+[ext_resource type="PackedScene" uid="uid://wmj3awa7akrv" path="res://CRAFTER/the_crafter_ooohhh.tscn" id="5_1dqp6"]
+
+[sub_resource type="GDScript" id="GDScript_awtp0"]
+script/source = "extends Node
+
+# To clean things up
+var crafting_recepies : Array[gmtk_crafting_recipes]
+
+@export var ui_node : Control
+
+func _init():
+	crafting_recepies.append(preload(\"res://Ressources/overworld_crafting/craft_block.tres\"))
+
+func _ready() :
+	_update_list()
+	
+func _update_list() :
+	ui_node.sync(crafting_recepies)
+"
+
+[node name="overworld_inventory" type="Node" node_paths=PackedStringArray("overworld_ui", "overworld_node", "platformer_node", "crafter_ui")]
+script = ExtResource("1_cm1w1")
+overworld_ui = NodePath("overworld_inventory/Inventory")
+overworld_node = NodePath("overworld")
+platformer_node = NodePath("Test_level")
+crafter_ui = NodePath("craftermanager/crafter_ui/TheCrafterOOOHHH")
+
+[node name="overworld" parent="." instance=ExtResource("2_2cdwx")]
+
+[node name="overworld_inventory" type="CanvasLayer" parent="."]
+
+[node name="Inventory" parent="overworld_inventory" instance=ExtResource("3_usaha")]
+
+[node name="Test_level" parent="." instance=ExtResource("4_f86gf")]
+position = Vector2(4, -96)
+
+[node name="craftermanager" type="Node" parent="." node_paths=PackedStringArray("ui_node")]
+script = SubResource("GDScript_awtp0")
+ui_node = NodePath("crafter_ui/TheCrafterOOOHHH")
+
+[node name="crafter_ui" type="CanvasLayer" parent="craftermanager"]
+
+[node name="TheCrafterOOOHHH" parent="craftermanager/crafter_ui" instance=ExtResource("5_1dqp6")]

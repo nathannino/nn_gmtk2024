@@ -1,0 +1,51 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1cqls1mwe8lq"]
+
+[ext_resource type="Texture2D" uid="uid://dqfvobsua2xan" path="res://pixelmora/ressource.png" id="1_e7ymc"]
+
+[sub_resource type="GDScript" id="GDScript_vnr1i"]
+script/source = "@tool
+extends Area2D
+
+@export var tool_unlock : gmtk_overworld_tool
+
+signal add_tool(unlock :gmtk_overworld_tool)
+
+func _ready():
+	if Engine.is_editor_hint() :
+		return
+	reset_values()
+	pass # Replace with function body.
+
+func reset_values():
+	if not tool_unlock == null :
+		$Sprite2D.texture = tool_unlock.sprite
+	
+func _process(delta):
+	if Engine.is_editor_hint():
+		reset_values()
+	pass
+
+func unlock() :
+	add_tool.emit(tool_unlock)
+	queue_free()
+
+func _on_body_entered(body):
+	if not body is CharacterBody2D :
+		return
+	unlock()
+	pass # Replace with function body.
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kmyta"]
+radius = 12.0
+
+[node name="platformer_upgrades" type="Area2D"]
+script = SubResource("GDScript_vnr1i")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_e7ymc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_kmyta")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
