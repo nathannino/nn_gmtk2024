@@ -1,0 +1,15 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://b2u2s7p008018"]
+
+[ext_resource type="Texture2D" uid="uid://dat7fjhhio2lt" path="res://pixelmora/border.png" id="1_3ppl5"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_865b0"]
+texture = ExtResource("1_3ppl5")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+
+[resource]
+MarginContainer/constants/margin_left = 5
+MarginContainer/constants/margin_right = 5
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_865b0")

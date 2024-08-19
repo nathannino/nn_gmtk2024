@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bsofnje4va3y7"]
 
-[ext_resource type="Texture2D" uid="uid://cfsvjc5hvokw7" path="res://pixelmora/player.png" id="1_plbri"]
 [ext_resource type="Script" path="res://Gatherer/overworld_pl.gd" id="1_y7oe5"]
+[ext_resource type="SpriteFrames" uid="uid://ctf00ufhnrou1" path="res://player_platformer.tres" id="2_xv10k"]
 [ext_resource type="Texture2D" uid="uid://chnxcwohyhwge" path="res://pixelmora/axe.png" id="3_dd8gr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0kbbd"]
@@ -17,8 +17,9 @@ script = ExtResource("1_y7oe5")
 tool = NodePath("Tool_anchor/Tool")
 toolAnchor = NodePath("Tool_anchor")
 
-[node name="Player" type="Sprite2D" parent="."]
-texture = ExtResource("1_plbri")
+[node name="Player" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_xv10k")
+animation = &"new_animation"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_0kbbd")

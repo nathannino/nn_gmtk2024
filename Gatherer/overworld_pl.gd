@@ -36,6 +36,15 @@ func _physics_process(delta):
 	velocity.y = Input.get_axis("ov_move_up", "ov_move_down")
 	velocity = velocity.normalized() * SPEED
 	
+	if velocity == Vector2.ZERO :
+		$Player.stop()
+	else :
+		$Player.play()
+		if (velocity.x < 0) :
+			$Player.scale.x = -1
+		else :
+			$Player.scale.x = 1
+	
 	if is_using_tool :
 		toolAnchor.rotation_degrees -= toolSpeed * delta
 		if toolAnchor.rotation_degrees < -180 or toolAnchor.rotation_degrees > 180 :

@@ -1,0 +1,9 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://n0ql68m0y26e"]
+
+[ext_resource type="Texture2D" uid="uid://d1cg6jffayn8q" path="res://pixelmora/empty.png" id="1_p8nl1"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5jrgp"]
+texture = ExtResource("1_p8nl1")
+
+[resource]
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_5jrgp")

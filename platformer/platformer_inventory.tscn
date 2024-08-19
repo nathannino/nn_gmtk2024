@@ -1,0 +1,104 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3riy8lgwqy40"]
+
+[ext_resource type="Theme" uid="uid://b2u2s7p008018" path="res://theme/platformer_inventory.tres" id="1_kleqq"]
+
+[sub_resource type="GDScript" id="GDScript_u357i"]
+script/source = "extends Control
+
+# Everyone we need to vent! 
+
+const itemcontainer = preload(\"res://platformer/Inventory_item_container.tscn\")
+
+var itemcontainers = []
+var cursorpos = 0
+
+
+func add_item(item : gmtk_tool) :
+	var container = itemcontainer.instantiate()
+	container.set_item(item)
+	$PanelContainer/VBoxContainer/HBoxContainer.add_child(container)
+	itemcontainers.append(container)
+	pass
+
+func remove_item(item : gmtk_tool) :
+	for container in itemcontainers :
+		if container.item == item :
+			itemcontainers.erase(container)
+			$PanelContainer/VBoxContainer/HBoxContainer.remove_child(container)
+			container.queue_free()
+			return
+	print(\"no items found??? what???\")
+
+func set_selected(pos : int) :
+	cursorpos = pos
+	if itemcontainers.is_empty() :
+		return
+	
+	for container in itemcontainers :
+		container.set_selected(false)
+	
+	itemcontainers[pos].set_selected(true)
+
+func reset_position() :
+	set_selected(0)
+
+func move_left() :
+	if itemcontainers.is_empty() :
+		return
+	cursorpos -= 1
+	if cursorpos < 0 :
+		cursorpos = itemcontainers.size() -1
+	set_selected(cursorpos)
+
+
+func move_right() :
+	if itemcontainers.is_empty() :
+		return
+	cursorpos += 1
+	if cursorpos >= itemcontainers.size() :
+		cursorpos = 0
+	set_selected(cursorpos)
+
+func get_selected() :
+	if itemcontainers.is_empty() :
+		return null
+	return itemcontainers[cursorpos].item
+
+"
+
+[node name="platformer_inventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_u357i")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -77.0
+offset_top = -27.5
+offset_right = 77.0
+offset_bottom = 27.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_kleqq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Inventory"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1

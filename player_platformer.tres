@@ -1,0 +1,18 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3 uid="uid://ctf00ufhnrou1"]
+
+[ext_resource type="Texture2D" uid="uid://c50gj4qpolulb" path="res://pixelmora/player_1.png" id="1_phcky"]
+[ext_resource type="Texture2D" uid="uid://choc8y643lgkh" path="res://pixelmora/player_2.png" id="2_jdw6l"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_phcky")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_jdw6l")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 4.0
+}]

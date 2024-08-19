@@ -1,35 +1,168 @@
-[gd_scene load_steps=7 format=3 uid="uid://d37x56h4fida0"]
+[gd_scene load_steps=10 format=3 uid="uid://d37x56h4fida0"]
 
 [ext_resource type="Script" path="res://Gatherer/resources/overworld_inventory.gd" id="1_cm1w1"]
 [ext_resource type="PackedScene" uid="uid://drtx2pscupfyt" path="res://Gatherer/overworld.tscn" id="2_2cdwx"]
 [ext_resource type="PackedScene" uid="uid://c773do7yhtxoj" path="res://Gatherer/inventory.tscn" id="3_usaha"]
 [ext_resource type="PackedScene" uid="uid://bl8iqbr5e05ib" path="res://platformer/test_level.tscn" id="4_f86gf"]
 [ext_resource type="PackedScene" uid="uid://wmj3awa7akrv" path="res://CRAFTER/the_crafter_ooohhh.tscn" id="5_1dqp6"]
+[ext_resource type="PackedScene" uid="uid://d3riy8lgwqy40" path="res://platformer/platformer_inventory.tscn" id="7_2y5td"]
+[ext_resource type="PackedScene" uid="uid://nhy0hme1xidi" path="res://noise.tscn" id="7_15fbq"]
 
 [sub_resource type="GDScript" id="GDScript_awtp0"]
 script/source = "extends Node
 
 # To clean things up
 var crafting_recepies : Array[gmtk_crafting_recipes]
+var selected : gmtk_crafting_recipes
+var default : gmtk_crafting_recipes
 
 @export var ui_node : Control
 
 func _init():
-	crafting_recepies.append(preload(\"res://Ressources/overworld_crafting/craft_block.tres\"))
+	selected = null
+	default = preload(\"res://Ressources/overworld_crafting/craft_block.tres\")
+	crafting_recepies.append(default)
+
+func reset_selection() :
+	set_selected(default)
 
 func _ready() :
 	_update_list()
+	add_recepie(preload(\"res://Ressources/overworld_crafting/craft_ladder.tres\"))
+	add_recepie(preload(\"res://Ressources/overworld_crafting/craft_bridge.tres\"))
+	add_recepie(preload(\"res://Ressources/overworld_crafting/craft_lift.tres\"))
+	set_selected(default)
 	
 func _update_list() :
 	ui_node.sync(crafting_recepies)
+
+func add_recepie(rec : gmtk_crafting_recipes) :
+	crafting_recepies.append(rec)
+	_update_list()
+
+func set_selected(newsel : gmtk_crafting_recipes) :
+	selected = newsel
+	ui_node.set_selected(selected)
+
+func move_up() :
+	if selected == null :
+		set_selected(crafting_recepies.back())
+	elif selected == crafting_recepies.front() :
+		set_selected(null)
+	else :
+		set_selected(crafting_recepies[crafting_recepies.find(selected)-1])
+
+func check_craft() :
+	if selected == null :
+		$\"..\".set_mode(Constants.horrible_idea.GATHERER)
+		return
+	
+	var craft_dict = {}
+	
+	for craft_item in selected.components :
+		if craft_item in craft_dict :
+			craft_dict[craft_item] += 1
+		else :
+			craft_dict[craft_item] = 1
+	
+	for craft_item in craft_dict :
+		if not craft_item.name in $\"..\".overworld_inventory :
+			print(\"not found\")
+			return
+		if not $\"..\".overworld_inventory[craft_item.name] is drop_instance :
+			print(\"not_drops\")
+			return
+		if not $\"..\".overworld_inventory[craft_item.name].amount >= craft_dict[craft_item] :
+			print(\"not enought\")
+			return
+	
+	if $\"../platformer_backpack\".check_space(selected.result) :
+		$\"../platformer_backpack\".add_item(selected.result)
+		for itm in selected.components :
+			$\"..\".remove_overworld_item(itm)
+	
+
+func move_down() :
+	if selected == null :
+		set_selected(crafting_recepies.front())
+	elif selected == crafting_recepies.back() :
+		set_selected(null)
+	else :
+		set_selected(crafting_recepies[crafting_recepies.find(selected)+1])
 "
 
-[node name="overworld_inventory" type="Node" node_paths=PackedStringArray("overworld_ui", "overworld_node", "platformer_node", "crafter_ui")]
+[sub_resource type="GDScript" id="GDScript_g7noo"]
+script/source = "extends Node
+
+@export var weight_limit = 6
+var current_weight = 0
+@export var ui : Control
+
+var backpack : Array[gmtk_tool]
+
+var ui_active = false
+
+func _init() :
+	backpack = []
+
+func _ready() :
+	add_item(preload(\"res://Ressources/platformer_tools/res_block.tres\"))
+	pass
+
+func check_space(item : gmtk_tool) :
+	return not item.weight + current_weight > weight_limit
+	pass
+
+func add_item(item : gmtk_tool) :
+	backpack.append(item)
+	current_weight += item.weight
+	ui.add_item(item)
+
+func use_item(item : gmtk_tool) :
+	var index = backpack.find(item)
+	backpack.remove_at(index)
+	current_weight -= item.weight
+	ui.remove_item(item)
+	ui.reset_position()
+
+func toggle_ui() :
+	if ui_active :
+		ui.hide()
+	else :
+		ui.reset_position()
+		ui.show()
+	ui_active = not ui_active
+
+func close_ui() :
+	ui.hide()
+	ui_active = false
+
+func move_left() :
+	ui.move_left()
+	pass
+
+func move_right() :
+	ui.move_right()
+	pass
+
+# Mostly to set the preview image tbh
+func get_item() :
+	return ui.get_selected()
+	pass
+
+
+func _on_test_level_tool_placed():
+	use_item(get_item())
+	pass # Replace with function body.
+"
+
+[node name="overworld_inventory" type="Node" node_paths=PackedStringArray("overworld_ui", "overworld_node", "platformer_node", "crafter_ui", "platformer_inv")]
 script = ExtResource("1_cm1w1")
 overworld_ui = NodePath("overworld_inventory/Inventory")
 overworld_node = NodePath("overworld")
 platformer_node = NodePath("Test_level")
 crafter_ui = NodePath("craftermanager/crafter_ui/TheCrafterOOOHHH")
+platformer_inv = NodePath("platformer_backpack")
 
 [node name="overworld" parent="." instance=ExtResource("2_2cdwx")]
 
@@ -47,3 +180,16 @@ ui_node = NodePath("crafter_ui/TheCrafterOOOHHH")
 [node name="crafter_ui" type="CanvasLayer" parent="craftermanager"]
 
 [node name="TheCrafterOOOHHH" parent="craftermanager/crafter_ui" instance=ExtResource("5_1dqp6")]
+
+[node name="platformer_backpack" type="Node" parent="." node_paths=PackedStringArray("ui")]
+script = SubResource("GDScript_g7noo")
+ui = NodePath("CanvasLayer/platformer_inventory")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="platformer_backpack"]
+
+[node name="platformer_inventory" parent="platformer_backpack/CanvasLayer" instance=ExtResource("7_2y5td")]
+visible = false
+
+[node name="noise" parent="." instance=ExtResource("7_15fbq")]
+
+[connection signal="tool_placed" from="Test_level" to="platformer_backpack" method="_on_test_level_tool_placed"]

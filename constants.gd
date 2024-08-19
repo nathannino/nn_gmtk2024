@@ -7,3 +7,7 @@ enum horrible_idea {GATHERER,CRAFTER,PLATFORMER}
 
 const bag_limit_icon = preload("res://pixelmora/weight.png")
 const downleft_arrow_icon = preload("res://pixelmora/downright_arrow.png")
+const downright_arrow_icon = preload("res://pixelmora/downleft_arrow.png.png")
+
+const empty_icon = preload("res://pixelmora/empty.png")
+const selected_icon = preload("res://pixelmora/RIGHT_ARROW_MENU.png")

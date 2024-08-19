@@ -1,0 +1,102 @@
+[gd_scene load_steps=10 format=3 uid="uid://b1fwr2bkqvkqk"]
+
+[ext_resource type="Texture2D" uid="uid://b3akvces4ys1g" path="res://Intro/LogoN_Gray .png" id="1_8f75y"]
+[ext_resource type="PackedScene" uid="uid://bakq84n75ppn4" path="res://main_menu.tscn" id="1_k2ti8"]
+[ext_resource type="Texture2D" uid="uid://dwi1gg00edex8" path="res://Intro/CircleClassic_Gray.png" id="2_qo017"]
+[ext_resource type="Texture2D" uid="uid://4a1o1dudean5" path="res://pixelmora/logo.png" id="3_5ec67"]
+[ext_resource type="PackedScene" uid="uid://nhy0hme1xidi" path="res://noise.tscn" id="4_3ng7j"]
+
+[sub_resource type="GDScript" id="GDScript_h0j5g"]
+script/source = "extends Node2D
+
+@export var delay : float
+@export var delaytwo : float
+@export var delaythree : float
+@export var delayfour : float
+@export var mainmenu : PackedScene
+var current_delay = 0.0
+
+var delayowndone = false
+var delaytwodown = false
+func _process(delta):
+	current_delay += delta
+	
+	if not delayowndone :
+		if current_delay >= delay :
+			$logo.hide()
+			$circle.hide()
+			$blackout.show()
+			$name.remove_theme_color_override(\"font_color\")
+			delayowndone = true
+			#TODO : Play sound effect
+	
+	if not delaytwodown :
+		if current_delay >= delaytwo :
+			$noise.show()
+			$blackout.hide()
+			$logoold.show()
+			delaytwodown = true
+	
+	if current_delay >= delaythree :
+		$logoold.hide()
+		$name.hide()
+	
+	if current_delay >= delayfour :
+		get_tree().change_scene_to_packed(mainmenu)
+"
+
+[sub_resource type="GDScript" id="GDScript_fg7bn"]
+script/source = "extends Sprite2D
+const speed = 200
+
+func _process(delta):
+	rotation_degrees += speed * delta
+"
+
+[sub_resource type="Gradient" id="Gradient_cofuk"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_p7tsi"]
+gradient = SubResource("Gradient_cofuk")
+fill_from = Vector2(0, 1)
+
+[node name="Node2D" type="Node2D"]
+script = SubResource("GDScript_h0j5g")
+delay = 5.0
+delaytwo = 5.2
+delaythree = 8.0
+delayfour = 8.2
+mainmenu = ExtResource("1_k2ti8")
+
+[node name="logo" type="Sprite2D" parent="."]
+position = Vector2(69, 85)
+scale = Vector2(0.0310526, 0.0310526)
+texture = ExtResource("1_8f75y")
+
+[node name="circle" type="Sprite2D" parent="."]
+position = Vector2(69, 85)
+scale = Vector2(0.0310526, 0.0310526)
+texture = ExtResource("2_qo017")
+script = SubResource("GDScript_fg7bn")
+
+[node name="name" type="Label" parent="."]
+offset_left = 105.0
+offset_top = 79.0
+offset_right = 281.0
+offset_bottom = 95.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Nathan_Nino"
+
+[node name="logoold" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(69, 85)
+texture = ExtResource("3_5ec67")
+
+[node name="blackout" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(156.5, 81)
+scale = Vector2(5.89062, 3.53125)
+texture = SubResource("GradientTexture2D_p7tsi")
+
+[node name="noise" parent="." instance=ExtResource("4_3ng7j")]
+visible = false

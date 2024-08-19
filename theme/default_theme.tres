@@ -1,0 +1,49 @@
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://lfdvqfstq1a4"]
+
+[ext_resource type="FontFile" uid="uid://cfj3mavdivorc" path="res://theme/PixelOperatorMonoHB8.ttf" id="1_qhf6m"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_167ve"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cxn6x"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_aem6g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3nnnn"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2u5rv"]
+bg_color = Color(0.470588, 0.4, 0.105882, 0.470588)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n8fya"]
+bg_color = Color(0.327652, 0.240061, 0.0403026, 1)
+
+[resource]
+Button/colors/font_color = Color(0.941, 0.902, 0.549, 1)
+Button/colors/font_focus_color = Color(0.941176, 0.901961, 0.54902, 1)
+Button/colors/font_hover_color = Color(0.941176, 0.901961, 0.54902, 1)
+Button/fonts/font = ExtResource("1_qhf6m")
+Button/styles/disabled = SubResource("StyleBoxEmpty_167ve")
+Button/styles/focus = SubResource("StyleBoxFlat_cxn6x")
+Button/styles/hover = SubResource("StyleBoxEmpty_aem6g")
+Button/styles/normal = SubResource("StyleBoxEmpty_3nnnn")
+Button/styles/pressed = SubResource("StyleBoxFlat_2u5rv")
+Label/colors/font_color = Color(0.941, 0.902, 0.549, 1)
+Label/fonts/font = ExtResource("1_qhf6m")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_n8fya")
+RichTextLabel/colors/default_color = Color(0.941, 0.902, 0.549, 1)
+TabBar/fonts/font = ExtResource("1_qhf6m")
+TabContainer/colors/font_selected_color = Color(0.855, 0.647, 0.125, 1)
+TabContainer/colors/font_unselected_color = Color(0.941, 0.902, 0.549, 1)
+TabContainer/fonts/font = ExtResource("1_qhf6m")
+Tree/colors/font_color = Color(0.941, 0.902, 0.549, 1)
+Tree/fonts/font = ExtResource("1_qhf6m")
+Tree/fonts/title_button_font = ExtResource("1_qhf6m")

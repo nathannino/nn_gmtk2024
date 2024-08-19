@@ -1,0 +1,3 @@
+crt.gdshader - CCO. Taken from https://godotshaders.com/shader/realistic-crt-shader/
+
+also in case somebody reads this... I totally just took a crt shader to hide my bad pixel art skills =P

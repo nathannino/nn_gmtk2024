@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=3 uid="uid://cm4yl7nghrj7e"]
+
+[ext_resource type="Theme" uid="uid://n0ql68m0y26e" path="res://theme/inventory_selector/selector_not.tres" id="1_1xui3"]
+[ext_resource type="Texture2D" uid="uid://dmtcsgv7k2w2n" path="res://pixelmora/wall.png" id="2_xngdw"]
+
+[sub_resource type="GDScript" id="GDScript_ka3k7"]
+script/source = "extends PanelContainer
+
+const selected_theme = preload(\"res://theme/inventory_selector/selector_yes.tres\")
+const unselected_theme = preload(\"res://theme/inventory_selector/selector_not.tres\")
+
+var item : gmtk_tool
+
+func set_item(p_item : gmtk_tool) :
+	$MarginContainer/TextureRect.texture = p_item.shop_sprite
+	item = p_item
+
+func set_selected(toggle : bool) :
+	if toggle :
+		theme = selected_theme
+	else :
+		theme = unselected_theme
+"
+
+[node name="PanelContainer" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 25)
+theme = ExtResource("1_1xui3")
+script = SubResource("GDScript_ka3k7")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer"]
+layout_mode = 2
+texture = ExtResource("2_xngdw")
+stretch_mode = 3

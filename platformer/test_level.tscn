@@ -11,6 +11,8 @@ script/source = "extends Node2D
 @export var camera : Camera2D
 @export var player : CharacterBody2D
 
+signal tool_placed
+
 func disable_camera() :
 	camera.enabled = false
 	pass
@@ -21,6 +23,14 @@ func enable_camera() :
 
 func reset_player_pos() :
 	player.position = Vector2.ZERO
+
+func start_tool_preview(tool : gmtk_tool) :
+	player.tool_preview.init_preview(tool)
+
+
+func _on_player_platformer_tool_placed():
+	tool_placed.emit()
+	pass # Replace with function body.
 "
 
 [node name="Test_level" type="Node2D" node_paths=PackedStringArray("camera", "player")]
@@ -53,3 +63,5 @@ drag_vertical_offset = -1.0
 
 [node name="axe_unlock" parent="." instance=ExtResource("4_1vkko")]
 position = Vector2(423, 88)
+
+[connection signal="tool_placed" from="PlayerOrigin/Player_platformer" to="." method="_on_player_platformer_tool_placed"]

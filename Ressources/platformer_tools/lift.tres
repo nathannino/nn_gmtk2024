@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="gmtk_tool" load_steps=3 format=3 uid="uid://thiwb10ul6xp"]
+
+[ext_resource type="Script" path="res://Ressources/platformer_tools/tools.gd" id="1_gi2iy"]
+[ext_resource type="Texture2D" uid="uid://dqfvobsua2xan" path="res://pixelmora/ressource.png" id="2_rpr5b"]
+
+[resource]
+script = ExtResource("1_gi2iy")
+sprite = ExtResource("2_rpr5b")
+shop_sprite = ExtResource("2_rpr5b")
+position_offset = Vector2(0, 0)
+weight = 2
+name = "Lift"

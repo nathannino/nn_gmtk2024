@@ -15,6 +15,9 @@ func init_preview(p_tool : gmtk_tool) :
 		remove_child(preview)
 		preview.queue_free() # lol hope this works =D
 	
+	if p_tool == null :
+		return
+	
 	preview = Sprite2D.new()
 	add_child(preview)
 	preview.texture = tool.sprite
@@ -34,12 +37,13 @@ func place_preview() :
 	if preview == null or tool == null :
 		return
 	var scene = tool.scene.instantiate()
-	scene.global_position = preview.global_position
 	toplevel_scene.add_child(scene)
+	scene.global_position = preview.global_position
+	
 	clear_preview()
 
 func set_tool_position() :
-	if preview == null :
+	if preview == null or tool == null :
 		return
 	if look_direction == Constants.look_direction_name.RIGHT :
 		preview.position = tool.position_offset

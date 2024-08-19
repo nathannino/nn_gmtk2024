@@ -1,0 +1,639 @@
+[gd_scene load_steps=8 format=3 uid="uid://bakq84n75ppn4"]
+
+[ext_resource type="PackedScene" uid="uid://nhy0hme1xidi" path="res://noise.tscn" id="1_qmf0y"]
+[ext_resource type="Theme" uid="uid://bgv6yifldyofq" path="res://theme/font_smoll.tres" id="2_e2pbh"]
+[ext_resource type="Script" path="res://rebind_button.gd" id="3_eyhvm"]
+
+[sub_resource type="GDScript" id="GDScript_vh0oa"]
+script/source = "extends Control
+
+func _main_menu_focus() :
+	$mainmenu.show()
+	$noise.show()
+	$mainmenu/HBoxContainer/Start.grab_focus()
+
+func _ready():
+	_main_menu_focus()
+
+
+func _on_start_pressed():
+	get_tree().change_scene_to_file(\"res://Gatherer/resources/overworld_inventory.tscn\") # Because of course this is the root scene
+	pass # Replace with function body.
+
+
+func _on_rebind_pressed():
+	$mainmenu.hide()
+	$VBoxContainer.showme()
+	pass # Replace with function body.
+
+
+func _on_rebind_2_pressed():
+	$mainmenu/HBoxContainer/Rebind2.release_focus()
+	$TabContainer.showme()
+	pass # Replace with function body.
+"
+
+[sub_resource type="GDScript" id="GDScript_ixdc5"]
+script/source = "extends VBoxContainer
+
+var keydict = {}
+
+func _redefine_buttons() :
+	for button in keydict :
+		if InputMap.action_get_events(keydict[button]).is_empty() :
+			button.text = \"[missing]\"
+		else :
+			button.text = InputMap.action_get_events(keydict[button])[0].as_text().trim_suffix(\" (Physical)\")
+	
+
+var _in_rebind = null
+func request_rebind(button:Button) :
+	if not _in_rebind == null :
+		return
+	_in_rebind = button
+	
+
+func _input(event):
+	if _in_rebind == null :
+		return
+	if event is InputEventKey || event is InputEventMouseButton :
+		var action_events = InputMap.action_get_events(keydict[_in_rebind])
+		
+		if not action_events.is_empty():
+			InputMap.action_erase_event(keydict[_in_rebind],action_events[0])
+		
+		for i in keydict.values() :
+			if InputMap.action_has_event(i,event) :
+				InputMap.action_erase_event(i,event)
+		
+		InputMap.action_add_event(keydict[_in_rebind],event)
+		_in_rebind = null
+		_redefine_buttons()
+		
+func _ready():
+	keydict = {
+		$ScrollContainer/VBoxContainer/move_left/moveleft : \"ov_move_left\",
+		$ScrollContainer/VBoxContainer/move_right/moveright : \"ov_move_right\",
+		$ScrollContainer/VBoxContainer/move_right2/moveup : \"ov_move_up\",
+		$ScrollContainer/VBoxContainer/move_right3/movedown : \"ov_move_down\",
+		$ScrollContainer/VBoxContainer/move_right4/pause : \"pj_open_menu\",
+		$ScrollContainer/VBoxContainer/move_right5/jump : \"pl_jump\",
+		$ScrollContainer/VBoxContainer/move_right6/Inventory : \"pl_use_tool\",
+		$ScrollContainer/VBoxContainer/move_right7/use : \"pl_place\",
+		$ScrollContainer/VBoxContainer/move_right8/cancel : \"pl_cancel\",
+		$ScrollContainer/VBoxContainer/move_right9/select : \"cf_confirm\",
+		$ScrollContainer/VBoxContainer/move_right10/previous : \"ov_item_previous\",
+		$ScrollContainer/VBoxContainer/move_right11/next : \"ov_item_next\",
+	}
+	_redefine_buttons()
+
+func showme() :
+	show()
+	$ScrollContainer/VBoxContainer/move_left2/goback.grab_focus()
+	$\"../noise\".hide()
+"
+
+[sub_resource type="GDScript" id="GDScript_c62bi"]
+script/source = "extends Button
+
+
+func _on_pressed():
+	$\"../../../..\".hide()
+	$\"../../../../..\"._main_menu_focus()
+	pass # Replace with function body.
+"
+
+[sub_resource type="GDScript" id="GDScript_861ft"]
+script/source = "extends TabContainer
+
+@export var scroll_step : int
+
+func showme() :
+	$\"../noise\".hide()
+	$\"../mainmenu\".hide()
+	$\".\".show()
+	$Engine.grab_focus()
+
+var scrollers = []
+
+func _ready() :
+	scrollers = [$Engine,$Others]
+
+func _input(event):
+	if not is_visible_in_tree() :
+		return
+
+	if event.is_action_pressed(\"pj_open_menu\") :
+		$\".\".hide()
+		$\"..\"._main_menu_focus()
+
+	if event.is_action_pressed(\"ui_left\") :
+		current_tab = 0
+	if event.is_action_pressed(\"ui_right\") :
+		current_tab = 1
+	if event.is_action_pressed(\"ui_down\") :
+		var scroll = scrollers[current_tab]
+		var scrollbarmax = scrollers[current_tab].get_v_scroll_bar().max_value
+		if scroll.scroll_vertical + scroll_step < scrollbarmax :
+			scroll.scroll_vertical += scroll_step
+		else :
+			scroll.scroll_vertical = scrollbarmax
+	if event.is_action_pressed(\"ui_up\") :
+		var scroll = scrollers[current_tab]
+		if scroll.scroll_vertical + scroll_step > 0 :
+			scroll.scroll_vertical -= scroll_step
+		else :
+			scroll.scroll_vertical = 0
+"
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_vh0oa")
+
+[node name="mainmenu" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="mainmenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -4.0
+offset_top = 16.0
+offset_right = 284.0
+offset_bottom = 32.0
+grow_horizontal = 2
+text = "DIY SCALLING TOOLS"
+
+[node name="HBoxContainer" type="VBoxContainer" parent="mainmenu"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = 60.0
+offset_right = 232.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Start" type="Button" parent="mainmenu/HBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Rebind2")
+focus_neighbor_bottom = NodePath("../Rebind")
+focus_next = NodePath("../Rebind")
+focus_previous = NodePath("../Rebind2")
+button_mask = 0
+text = "Start"
+
+[node name="Rebind" type="Button" parent="mainmenu/HBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Start")
+focus_neighbor_bottom = NodePath("../Rebind2")
+focus_next = NodePath("../Start")
+focus_previous = NodePath("../Rebind2")
+button_mask = 0
+text = "Rebind"
+
+[node name="Rebind2" type="Button" parent="mainmenu/HBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Rebind")
+focus_neighbor_bottom = NodePath("../Start")
+focus_next = NodePath("../Start")
+focus_previous = NodePath("../Rebind")
+button_mask = 0
+text = "Attribution"
+
+[node name="noise" parent="." instance=ExtResource("1_qmf0y")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+offset_right = 320.0
+offset_bottom = 180.0
+script = SubResource("GDScript_ixdc5")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "Rebind controls"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_e2pbh")
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="move_left2" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_left2"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_left2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="goback" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_left2"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right11/next")
+focus_neighbor_bottom = NodePath("../../move_left/moveleft")
+focus_next = NodePath("../../move_left/moveleft")
+focus_previous = NodePath("../../move_right11/next")
+button_mask = 0
+text = "Go Back"
+script = SubResource("GDScript_c62bi")
+
+[node name="move_left" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_left"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Move left"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_left"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="moveleft" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_left"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_left2/goback")
+focus_neighbor_bottom = NodePath("../../move_right/moveright")
+focus_next = NodePath("../../move_right/moveright")
+focus_previous = NodePath("../../move_left2/goback")
+button_mask = 0
+text = "Left"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Move right"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="moveright" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_left/moveleft")
+focus_neighbor_bottom = NodePath("../../move_right2/moveup")
+focus_next = NodePath("../../move_right2/moveup")
+focus_previous = NodePath("../../move_left/moveleft")
+button_mask = 0
+text = "Right
+"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right2" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right2"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Move up"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="moveup" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right2"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right/moveright")
+focus_neighbor_bottom = NodePath("../../move_right3/movedown")
+focus_next = NodePath("../../move_right3/movedown")
+focus_previous = NodePath("../../move_right/moveright")
+button_mask = 0
+text = "Up"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right3" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right3"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Move down"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="movedown" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right3"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right2/moveup")
+focus_neighbor_bottom = NodePath("../../move_right4/pause")
+focus_next = NodePath("../../move_right4/pause")
+focus_previous = NodePath("../../move_right2/moveup")
+button_mask = 0
+text = "Down"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right4" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right4"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Pause"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right4"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="pause" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right4"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right3/movedown")
+focus_neighbor_bottom = NodePath("../../move_right5/jump")
+focus_next = NodePath("../../move_right5/jump")
+focus_previous = NodePath("../../move_right3/movedown")
+button_mask = 0
+text = "Escape"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right5" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right5"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Jump"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right5"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="jump" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right5"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right4/pause")
+focus_neighbor_bottom = NodePath("../../move_right6/Inventory")
+focus_next = NodePath("../../move_right6/Inventory")
+focus_previous = NodePath("../../move_right4/pause")
+button_mask = 0
+text = "Space"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right6" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right6"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Inventory"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right6"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="Inventory" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right6"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right5/jump")
+focus_neighbor_bottom = NodePath("../../move_right7/use")
+focus_next = NodePath("../../move_right7/use")
+focus_previous = NodePath("../../move_right5/jump")
+button_mask = 0
+text = "Shift"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right7" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right7"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Use"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right7"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="use" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right7"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right6/Inventory")
+focus_neighbor_bottom = NodePath("../../move_right8/cancel")
+focus_next = NodePath("../../move_right8/cancel")
+focus_previous = NodePath("../../move_right6/Inventory")
+button_mask = 0
+text = "Space"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right8" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right8"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Cancel"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right8"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="cancel" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right8"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right7/use")
+focus_neighbor_bottom = NodePath("../../move_right9/select")
+focus_next = NodePath("../../move_right9/select")
+focus_previous = NodePath("../../move_right7/use")
+button_mask = 0
+text = "idk"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right9" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right9"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Select
+"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right9"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="select" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right9"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right8/cancel")
+focus_neighbor_bottom = NodePath("../../move_right10/previous")
+focus_next = NodePath("../../move_right10/previous")
+focus_previous = NodePath("../../move_right8/cancel")
+button_mask = 0
+text = "idk"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right10" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right10"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Previous Item"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right10"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="previous" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right10"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right9/select")
+focus_neighbor_bottom = NodePath("../../move_right11/next")
+focus_next = NodePath("../../move_right11/next")
+focus_previous = NodePath("../../move_right9/select")
+button_mask = 0
+text = "idk"
+script = ExtResource("3_eyhvm")
+
+[node name="move_right11" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right11"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Next Item
+"
+
+[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right11"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 55.85
+
+[node name="next" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right11"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../../move_right10/previous")
+focus_neighbor_bottom = NodePath("../../move_left2/goback")
+focus_next = NodePath("../../move_left2/goback")
+focus_previous = NodePath("../../move_right10/previous")
+button_mask = 0
+text = "idk"
+script = ExtResource("3_eyhvm")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_861ft")
+scroll_step = 20
+
+[node name="Engine" type="ScrollContainer" parent="TabContainer"]
+layout_mode = 2
+follow_focus = true
+
+[node name="Label" type="Label" parent="TabContainer/Engine"]
+layout_mode = 2
+theme = ExtResource("2_e2pbh")
+text = "Copyright (c) 2014-present Godot Engine 
+  contributors.
+Copyright (c) 2007-2014 Juan Linietsky, 
+  Ariel Manzur.
+
+Permission is hereby granted, free of 
+  charge, to any person obtaining a 
+  copy
+of this software and associated 
+  documentation files (the \"Software\"), 
+  to deal
+in the Software without restriction, 
+  including without limitation the 
+  rights to use, copy, modify, merge, 
+  publish, distribute, sublicense, 
+  and/or sells
+copies of the Software, and to permit 
+  persons to whom the Software is
+furnished to do so, subject to the 
+  following conditions:
+
+The above copyright notice and this 
+  permission notice shall be included 
+  in all
+copies or substantial portions of the 
+  Software.
+
+THE SOFTWARE IS PROVIDED \"AS IS\", 
+  WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR
+IMPLIED, INCLUDING BUT NOT 
+  LIMITED TO THE WARRANTIES OF 
+  MERCHANTABILITY,
+FITNESS FOR A PARTICULAR 
+  PURPOSE AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS 
+  BE LIABLE FOR ANY CLAIM, 
+  DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION 
+  OF CONTRACT, TORT OR OTHERWISE, 
+  ARISING FROM,
+OUT OF OR IN CONNECTION WITH 
+  THE SOFTWARE OR THE USE OR 
+  OTHER DEALINGS IN THE
+SOFTWARE.
+
+-- Godot Engine 
+  <https://godotengine.org>"
+
+[node name="Others" type="ScrollContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Others"]
+layout_mode = 2
+theme = ExtResource("2_e2pbh")
+text = "crt.gdshader - CCO. Taken from 
+<https://godotshaders.com/shader/
+  realistic-crt-shader/>
+
+PixelOperatorMonoHB8 : CC0. Taken from : 
+<https://fontlibrary.org/en/font/
+  pixel-operator>
+
+Input remapping inspired by :
+<https://www.youtube.com/
+  watch?v=FWersItLsj4>
+
+The rest is from the godot docs
+"
+
+[connection signal="pressed" from="mainmenu/HBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="mainmenu/HBoxContainer/Rebind" to="." method="_on_rebind_pressed"]
+[connection signal="pressed" from="mainmenu/HBoxContainer/Rebind2" to="." method="_on_rebind_2_pressed"]
+[connection signal="pressed" from="VBoxContainer/ScrollContainer/VBoxContainer/move_left2/goback" to="VBoxContainer/ScrollContainer/VBoxContainer/move_left2/goback" method="_on_pressed"]

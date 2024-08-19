@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://nhy0hme1xidi"]
+
+[ext_resource type="Shader" path="res://shader/crt.gdshader" id="1_2x44r"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shkpx"]
+shader = ExtResource("1_2x44r")
+shader_parameter/resolution = Vector2(320, 180)
+shader_parameter/scan_line_amount = 0.0
+shader_parameter/warp_amount = 0.6
+shader_parameter/noise_amount = 0.03
+shader_parameter/interference_amount = 0.0
+shader_parameter/grille_amount = 0.167
+shader_parameter/grille_size = 1.0
+shader_parameter/vignette_amount = 0.32
+shader_parameter/vignette_intensity = 0.849
+shader_parameter/aberation_amount = 0.0
+shader_parameter/roll_line_amount = 0.3
+shader_parameter/roll_speed = 0.5
+shader_parameter/scan_line_strength = -8.0
+shader_parameter/pixel_strength = -2.0
+
+[node name="noise" type="CanvasLayer"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_shkpx")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

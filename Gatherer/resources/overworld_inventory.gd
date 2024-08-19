@@ -10,6 +10,7 @@ var current_selection = null
 var current_mode = Constants.horrible_idea.GATHERER #TODO : Should be platformer
 @export var platformer_node : Node2D
 @export var crafter_ui : Control
+@export var platformer_inv : Node
 # I hate inventories why do I have two of them???? :crying emoji:
 # It got worse... overworld_inventory is now the root gameplay node
 
@@ -29,7 +30,22 @@ func _disable_all() :
 	_disable_root_ish_node(platformer_node)
 	overworld_ui.hide()
 	crafter_ui.hide()
+
+var _is_paused = true
+
+func _unpause() :
+	_is_paused = false
+	match current_mode :
+		Constants.horrible_idea.GATHERER:
+			_enable_root_ish_node(overworld_node,false)
+		Constants.horrible_idea.PLATFORMER:
+			_enable_root_ish_node(platformer_node,false)
+
+func _pause_all(consider_paused : bool) :
+	overworld_node.process_mode = Node.PROCESS_MODE_DISABLED
+	platformer_node.process_mode = Node.PROCESS_MODE_DISABLED
 	
+	_is_paused = consider_paused
 
 func set_mode(p_mode : Constants.horrible_idea) :
 	var old_mode = current_mode
@@ -45,6 +61,9 @@ func set_mode(p_mode : Constants.horrible_idea) :
 			pass
 		Constants.horrible_idea.CRAFTER :
 			crafter_ui.show()
+			$craftermanager.reset_selection()
+			sync_overworld_inventory_crafter()
+			crafter_ui.sync_platformer_inventory(platformer_inv)
 			pass
 		Constants.horrible_idea.PLATFORMER:
 			_enable_root_ish_node(platformer_node,true)
@@ -83,17 +102,38 @@ func _input(event):
 			select_next()
 		if event.is_action_pressed("ov_item_previous") :
 			select_previous()
-		if event.is_action_pressed("ov_use_tool") :
+		if event.is_action_pressed("pl_use_tool") :
 			overworld_use_item()
-		if event.is_action_pressed("ov_interact") :
+		if event.is_action_pressed("cf_confirm") :
 			if overworld_node.inside_crafter_radius :
 				set_mode(Constants.horrible_idea.CRAFTER)
 		return
 	if current_mode == Constants.horrible_idea.CRAFTER :
-		if event.is_action_pressed("ui_up") :
-			print("ui_up")
-		if event.is_action_pressed("ui_down") :
-			print("ui_down")
+		if event.is_action_pressed("ov_move_up") or event.is_action_pressed("ui_up"):
+			$craftermanager.move_up()
+		if event.is_action_pressed("ov_move_down") or event.is_action_pressed("ui_down") :
+			$craftermanager.move_down()
+		if event.is_action_pressed("cf_confirm") :
+			$craftermanager.check_craft()
+		if event.is_action_pressed("pj_open_menu") or event.is_action_pressed("pl_cancel") :
+			set_mode(Constants.horrible_idea.GATHERER)
+	if current_mode == Constants.horrible_idea.PLATFORMER :
+		if event.is_action_pressed("pl_use_tool") :
+			platformer_inv.toggle_ui()
+			if platformer_inv.ui_active :
+				_pause_all(false)
+			else :
+				_unpause()
+				platformer_node.start_tool_preview(null)
+		if platformer_inv.ui_active :
+			if event.is_action_pressed("ov_item_previous") or event.is_action_pressed("ui_left") or event.is_action_pressed("ov_move_left") :
+				platformer_inv.move_left()
+			if event.is_action_pressed("ov_item_next") or event.is_action_pressed("ui_right") or event.is_action_pressed("ov_move_right") :
+				platformer_inv.move_right()
+			if event.is_action_pressed("cf_confirm") or event.is_action_pressed("ui_select") :
+				platformer_inv.close_ui()
+				_unpause()
+				platformer_node.start_tool_preview(platformer_inv.get_item())
 
 func overworld_use_item() :
 	if current_selection == null :
@@ -153,3 +193,20 @@ func add_overworld_item(drop : gmtk_overworld_drops) :
 		overworld_inventory[drop.name] = new_item
 	overworld_ui.update_inventory(overworld_inventory.values())
 	_new_selection(current_selection)
+
+func remove_overworld_item(drop : gmtk_overworld_drops) :
+	var inst = overworld_inventory[drop.name]
+	if inst.amount == 1 :
+		if current_selection == drop.name :
+			select_next()
+		overworld_inventory.erase(drop.name)
+	else :
+		overworld_inventory[drop.name].amount -= 1
+	overworld_ui.update_inventory(overworld_inventory.values())
+	_new_selection(current_selection)
+	# because tbh this will only happen in the crafter
+	sync_overworld_inventory_crafter()
+	crafter_ui.sync_platformer_inventory(platformer_inv)
+
+func sync_overworld_inventory_crafter() :
+	crafter_ui.inventory_sync(overworld_inventory)
