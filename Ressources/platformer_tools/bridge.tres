@@ -1,12 +1,15 @@
-[gd_resource type="Resource" script_class="gmtk_tool" load_steps=3 format=3 uid="uid://clvm4rgb065hc"]
+[gd_resource type="Resource" script_class="gmtk_tool" load_steps=5 format=3 uid="uid://clvm4rgb065hc"]
 
 [ext_resource type="Script" path="res://Ressources/platformer_tools/tools.gd" id="1_enop1"]
-[ext_resource type="Texture2D" uid="uid://dqfvobsua2xan" path="res://pixelmora/ressource.png" id="2_52v76"]
+[ext_resource type="PackedScene" uid="uid://cpw4do1um1fkm" path="res://platformer/tools/bridge.tscn" id="1_la3gu"]
+[ext_resource type="Texture2D" uid="uid://du6uqvkehewt3" path="res://pixelmora/bridge_icon.png" id="2_sukar"]
+[ext_resource type="Texture2D" uid="uid://ce81rpgeevq6x" path="res://pixelmora/bridge.png" id="3_t6wtk"]
 
 [resource]
 script = ExtResource("1_enop1")
-sprite = ExtResource("2_52v76")
-shop_sprite = ExtResource("2_52v76")
-position_offset = Vector2(0, 0)
+sprite = ExtResource("3_t6wtk")
+shop_sprite = ExtResource("2_sukar")
+position_offset = Vector2(0, -42)
+scene = ExtResource("1_la3gu")
 weight = 2
 name = "Bridge"

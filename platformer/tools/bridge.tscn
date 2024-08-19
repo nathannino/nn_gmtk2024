@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://cpw4do1um1fkm"]
+
+[ext_resource type="Texture2D" uid="uid://ce81rpgeevq6x" path="res://pixelmora/bridge.png" id="1_4py1w"]
+[ext_resource type="Script" path="res://platformer/tools/regrab_area.gd" id="2_tqo76"]
+
+[sub_resource type="GDScript" id="GDScript_vqfwt"]
+script/source = "extends RigidBody2D
+
+const force = 1
+
+func customready(p_dir : Constants.look_direction_name, p_player : CharacterBody2D) :
+	if p_dir == Constants.look_direction_name.RIGHT :
+		angular_velocity = force
+	else :
+		angular_velocity = -force
+	$regrab_area.register_player(p_player)
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_su0q8"]
+radius = 8.0
+height = 102.0
+
+[node name="RigidBody2D" type="RigidBody2D"]
+script = SubResource("GDScript_vqfwt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_4py1w")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(3, -48, -1, -43, -1, 43, 3, 48)
+
+[node name="regrab_area" type="Area2D" parent="."]
+script = ExtResource("2_tqo76")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="regrab_area"]
+position = Vector2(3, 0)
+shape = SubResource("CapsuleShape2D_su0q8")

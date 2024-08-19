@@ -1,12 +1,19 @@
-[gd_scene load_steps=6 format=3 uid="uid://lay38efo5186"]
+[gd_scene load_steps=9 format=3 uid="uid://lay38efo5186"]
 
 [ext_resource type="Script" path="res://platformer/player_platformer.gd" id="1_3uwpn"]
 [ext_resource type="Resource" uid="uid://ctb5w6yx2h641" path="res://Ressources/platformer_tools/res_block.tres" id="2_myahm"]
 [ext_resource type="SpriteFrames" uid="uid://ctf00ufhnrou1" path="res://player_platformer.tres" id="3_h0t2y"]
 [ext_resource type="PackedScene" uid="uid://d2u3el8g15man" path="res://platformer/tools/pl_tool_preview.tscn" id="3_vehus"]
+[ext_resource type="Texture2D" uid="uid://byf4bliivmbyi" path="res://pixelmora/bag.png" id="5_l7kgb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ouuo"]
 size = Vector2(5, 14)
+
+[sub_resource type="Gradient" id="Gradient_b30q3"]
+colors = PackedColorArray(0, 0, 0, 0.329412, 0, 0, 0, 0.329412)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_plosn"]
+gradient = SubResource("Gradient_b30q3")
 
 [node name="Player_platformer" type="CharacterBody2D" node_paths=PackedStringArray("pos_left", "pos_right")]
 script = ExtResource("1_3uwpn")
@@ -30,3 +37,14 @@ position = Vector2(-8, 0)
 
 [node name="pl_right" type="Node2D" parent="."]
 position = Vector2(8, 0)
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(1, -16)
+scale = Vector2(-0.0719443, 16.9714)
+texture = SubResource("GradientTexture1D_plosn")
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite2D2"]
+rotation = 3.14159
+scale = Vector2(13.8996, -0.0589227)
+texture = ExtResource("5_l7kgb")

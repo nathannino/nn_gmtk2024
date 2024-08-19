@@ -75,3 +75,19 @@ func _physics_process(delta):
 	
 	if global_position.x < 0 :
 		switch_mode.emit(Constants.horrible_idea.GATHERER)
+
+var current_tool_ground : Node2D
+var current_tool_res : gmtk_tool
+func register_current_tool_ground(n : Node2D, toll : gmtk_tool) :
+	$Sprite2D2.show()
+	current_tool_ground = n
+	current_tool_res = toll.duplicate()
+
+func deregister_current_tool_ground(n : Node2D) :
+	if current_tool_ground == n :
+		$Sprite2D2.hide()
+		current_tool_ground = null
+		current_tool_res = null
+
+func hide_indicator() :
+	$Sprite2D2.hide()

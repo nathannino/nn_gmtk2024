@@ -1,0 +1,21 @@
+[gd_scene load_steps=6 format=3 uid="uid://dc0di5h2h577n"]
+
+[ext_resource type="PackedScene" uid="uid://bgq2tnkploehl" path="res://Gatherer/resources/overworld_resource.tscn" id="1_p7bty"]
+[ext_resource type="Texture2D" uid="uid://dpjolta4u1s3t" path="res://pixelmora/longgrass.png" id="2_757o3"]
+[ext_resource type="Resource" uid="uid://cc55b31pnbyh3" path="res://Ressources/overworld_drops/rope.tres" id="3_4uy57"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cb883"]
+size = Vector2(0, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ecnwy"]
+
+[node name="Tree" type="Node2D"]
+
+[node name="overworld_resource" parent="." instance=ExtResource("1_p7bty")]
+collision_shape = SubResource("RectangleShape2D_cb883")
+extract_range = SubResource("CircleShape2D_ecnwy")
+sprite = ExtResource("2_757o3")
+offset = Vector2(0.55, -3.575)
+life = 1
+tool = 1
+drop = ExtResource("3_4uy57")

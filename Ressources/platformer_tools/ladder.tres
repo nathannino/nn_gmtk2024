@@ -1,12 +1,15 @@
-[gd_resource type="Resource" script_class="gmtk_tool" load_steps=3 format=3 uid="uid://ddxpjesix4eoa"]
+[gd_resource type="Resource" script_class="gmtk_tool" load_steps=5 format=3 uid="uid://ddxpjesix4eoa"]
 
 [ext_resource type="Script" path="res://Ressources/platformer_tools/tools.gd" id="1_k74wl"]
-[ext_resource type="Texture2D" uid="uid://dqfvobsua2xan" path="res://pixelmora/ressource.png" id="2_qxffy"]
+[ext_resource type="PackedScene" uid="uid://cgd7gl3r4e1tt" path="res://platformer/tools/ladder.tscn" id="1_ojn52"]
+[ext_resource type="Texture2D" uid="uid://bft16pnnhb5nb" path="res://pixelmora/ladder_icon.png" id="2_6jvo1"]
+[ext_resource type="Texture2D" uid="uid://b31crnyugmkeb" path="res://pixelmora/ladder.png" id="4_2nd6h"]
 
 [resource]
 script = ExtResource("1_k74wl")
-sprite = ExtResource("2_qxffy")
-shop_sprite = ExtResource("2_qxffy")
-position_offset = Vector2(0, 0)
+sprite = ExtResource("4_2nd6h")
+shop_sprite = ExtResource("2_6jvo1")
+position_offset = Vector2(0, -40)
+scene = ExtResource("1_ojn52")
 weight = 2
 name = "Ladder"

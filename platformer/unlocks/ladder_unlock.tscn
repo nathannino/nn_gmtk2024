@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://ciyupvk465dgp"]
+
+[ext_resource type="PackedScene" uid="uid://b1cqls1mwe8lq" path="res://platformer/platformer_upgrades.tscn" id="1_vvndc"]
+[ext_resource type="Resource" uid="uid://d0lqwdqmh5e80" path="res://Ressources/overworld_crafting/craft_ladder.tres" id="2_lh4v7"]
+
+[node name="axe_unlock" type="Node2D"]
+
+[node name="platformer_upgrades" parent="." instance=ExtResource("1_vvndc")]
+recepie_unlock = ExtResource("2_lh4v7")
+unlock_type = 1

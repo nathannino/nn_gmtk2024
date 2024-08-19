@@ -53,6 +53,7 @@ func set_mode(p_mode : Constants.horrible_idea) :
 	_disable_all()
 	match p_mode :
 		Constants.horrible_idea.GATHERER:
+			platformer_node.clear_notification()
 			if old_mode == Constants.horrible_idea.CRAFTER :
 				_enable_root_ish_node(overworld_node,false)
 			else :
@@ -91,6 +92,7 @@ func _ready(): # https://forum.godotengine.org/t/how-to-get-all-children-from-a-
 			node.connect("switch_mode",set_mode)
 		if node.scene_file_path == "res://platformer/platformer_upgrades.tscn" :
 			node.connect("add_tool",add_overworld_tool)
+			node.connect("add_recepie",add_recepie)
 	#afterwards
 	_new_selection(null)
 	set_mode(Constants.horrible_idea.PLATFORMER)
@@ -102,7 +104,7 @@ func _input(event):
 			select_next()
 		if event.is_action_pressed("ov_item_previous") :
 			select_previous()
-		if event.is_action_pressed("pl_use_tool") :
+		if event.is_action_pressed("pl_place") :
 			overworld_use_item()
 		if event.is_action_pressed("cf_confirm") :
 			if overworld_node.inside_crafter_radius :
@@ -180,6 +182,7 @@ func add_overworld_tool(p_tool : gmtk_overworld_tool) :
 	if overworld_inventory.has(p_tool.name) :
 		print("wtf why. " + p_tool.name + " is already in the inventory")
 		return
+	platformer_node.start_notification_tool(p_tool)
 	overworld_inventory[p_tool.name] = p_tool
 	overworld_ui.update_inventory(overworld_inventory.values())
 	_new_selection(current_selection)
@@ -210,3 +213,6 @@ func remove_overworld_item(drop : gmtk_overworld_drops) :
 
 func sync_overworld_inventory_crafter() :
 	crafter_ui.inventory_sync(overworld_inventory)
+
+func add_recepie(rec : gmtk_crafting_recipes) :
+	$craftermanager.add_recepie(rec)

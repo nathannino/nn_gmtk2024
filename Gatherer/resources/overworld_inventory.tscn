@@ -28,9 +28,6 @@ func reset_selection() :
 
 func _ready() :
 	_update_list()
-	add_recepie(preload(\"res://Ressources/overworld_crafting/craft_ladder.tres\"))
-	add_recepie(preload(\"res://Ressources/overworld_crafting/craft_bridge.tres\"))
-	add_recepie(preload(\"res://Ressources/overworld_crafting/craft_lift.tres\"))
 	set_selected(default)
 	
 func _update_list() :
@@ -106,7 +103,9 @@ func _init() :
 	backpack = []
 
 func _ready() :
-	add_item(preload(\"res://Ressources/platformer_tools/res_block.tres\"))
+	#add_item(preload(\"res://Ressources/platformer_tools/ladder.tres\"))
+	#add_item(preload(\"res://Ressources/platformer_tools/bridge.tres\"))
+	#add_item(preload(\"res://Ressources/platformer_tools/res_block.tres\"))
 	pass
 
 func check_space(item : gmtk_tool) :
@@ -154,6 +153,11 @@ func get_item() :
 func _on_test_level_tool_placed():
 	use_item(get_item())
 	pass # Replace with function body.
+
+
+func _on_test_level_add_tool(p_tool):
+	add_item(p_tool)
+	pass # Replace with function body.
 "
 
 [node name="overworld_inventory" type="Node" node_paths=PackedStringArray("overworld_ui", "overworld_node", "platformer_node", "crafter_ui", "platformer_inv")]
@@ -192,4 +196,5 @@ visible = false
 
 [node name="noise" parent="." instance=ExtResource("7_15fbq")]
 
+[connection signal="add_tool" from="Test_level" to="platformer_backpack" method="_on_test_level_add_tool"]
 [connection signal="tool_placed" from="Test_level" to="platformer_backpack" method="_on_test_level_tool_placed"]

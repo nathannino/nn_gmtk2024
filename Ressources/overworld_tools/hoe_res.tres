@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="gmtk_overworld_tool" load_steps=3 format=3 uid="uid://c7egja1qsqi6f"]
+
+[ext_resource type="Script" path="res://Ressources/overworld_tools/overworld_tools.gd" id="1_8gcs3"]
+[ext_resource type="Texture2D" uid="uid://wj13vvjtwkp8" path="res://pixelmora/hoe.png" id="2_61cuc"]
+
+[resource]
+script = ExtResource("1_8gcs3")
+sprite = ExtResource("2_61cuc")
+position_offset = Vector2(0, -8)
+endless = true
+type = 1
+name = "Hoe"

@@ -39,6 +39,8 @@ func place_preview() :
 	var scene = tool.scene.instantiate()
 	toplevel_scene.add_child(scene)
 	scene.global_position = preview.global_position
+	if scene.has_method("customready") :
+		scene.customready(look_direction,$"..")
 	
 	clear_preview()
 
@@ -46,9 +48,10 @@ func set_tool_position() :
 	if preview == null or tool == null :
 		return
 	if look_direction == Constants.look_direction_name.RIGHT :
-		preview.position = tool.position_offset
+		preview.position.x = tool.position_offset.x
 	else :
-		preview.position = -tool.position_offset
+		preview.position.x = -tool.position_offset.x
+	preview.position.y = tool.position_offset.y
 
 func set_look_direction(dir : Constants.look_direction_name) :
 	look_direction = dir

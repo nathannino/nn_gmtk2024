@@ -1,14 +1,33 @@
-[gd_scene load_steps=3 format=3 uid="uid://b2aucu3wteib1"]
+[gd_scene load_steps=6 format=3 uid="uid://b2aucu3wteib1"]
 
 [ext_resource type="Texture2D" uid="uid://dmtcsgv7k2w2n" path="res://pixelmora/wall.png" id="1_25bq3"]
+[ext_resource type="Script" path="res://platformer/tools/regrab_area.gd" id="2_ypefd"]
+
+[sub_resource type="GDScript" id="GDScript_t84s4"]
+script/source = "extends StaticBody2D
+
+func customready(p_dir : Constants.look_direction_name, p_player : CharacterBody2D) :
+	$regrab_area.register_player(p_player)
+	pass
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_48fik"]
 size = Vector2(16, 16)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_101oa"]
+radius = 13.0
+
 [node name="platformer_block" type="StaticBody2D"]
+script = SubResource("GDScript_t84s4")
 
 [node name="Wall" type="Sprite2D" parent="."]
 texture = ExtResource("1_25bq3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_48fik")
+
+[node name="regrab_area" type="Area2D" parent="."]
+script = ExtResource("2_ypefd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="regrab_area"]
+shape = SubResource("CircleShape2D_101oa")

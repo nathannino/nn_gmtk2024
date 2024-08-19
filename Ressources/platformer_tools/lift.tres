@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="gmtk_tool" load_steps=3 format=3 uid="uid://thiwb10ul6xp"]
+[gd_resource type="Resource" script_class="gmtk_tool" load_steps=4 format=3 uid="uid://thiwb10ul6xp"]
 
 [ext_resource type="Script" path="res://Ressources/platformer_tools/tools.gd" id="1_gi2iy"]
+[ext_resource type="Texture2D" uid="uid://ds0v4s344ne2d" path="res://pixelmora/lift_icon.png" id="2_k76in"]
 [ext_resource type="Texture2D" uid="uid://dqfvobsua2xan" path="res://pixelmora/ressource.png" id="2_rpr5b"]
 
 [resource]
 script = ExtResource("1_gi2iy")
 sprite = ExtResource("2_rpr5b")
-shop_sprite = ExtResource("2_rpr5b")
+shop_sprite = ExtResource("2_k76in")
 position_offset = Vector2(0, 0)
 weight = 2
 name = "Lift"

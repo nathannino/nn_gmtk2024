@@ -1,0 +1,135 @@
+[gd_scene load_steps=6 format=3 uid="uid://cgd7gl3r4e1tt"]
+
+[ext_resource type="Texture2D" uid="uid://b31crnyugmkeb" path="res://pixelmora/ladder.png" id="1_vwo7h"]
+[ext_resource type="Script" path="res://platformer/tools/regrab_area.gd" id="2_38vsu"]
+
+[sub_resource type="GDScript" id="GDScript_mkr3t"]
+script/source = "extends Node2D
+
+func customready(p_dir : Constants.look_direction_name, p_player : CharacterBody2D) :
+	$Regrab_area.register_player(p_player)
+	pass
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_84oqp"]
+size = Vector2(11, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mc06f"]
+size = Vector2(21, 13)
+
+[node name="Ladder" type="Node2D"]
+script = SubResource("GDScript_mkr3t")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_vwo7h")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, -7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D8"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D9" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, -14)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D9"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D10" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, -21)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D10"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D11" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, -28)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D11"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D12" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, -35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D12"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D13" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, -42)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D13"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, 14)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, 21)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, 28)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, 35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D6"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="."]
+position = Vector2(-0.25, 42)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D7"]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_84oqp")
+one_way_collision = true
+
+[node name="Regrab_area" type="Area2D" parent="."]
+script = ExtResource("2_38vsu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Regrab_area"]
+position = Vector2(-0.5, 42)
+shape = SubResource("RectangleShape2D_mc06f")

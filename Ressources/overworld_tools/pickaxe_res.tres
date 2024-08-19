@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="gmtk_overworld_tool" load_steps=3 format=3 uid="uid://b0ulibpeyeew"]
+
+[ext_resource type="Script" path="res://Ressources/overworld_tools/overworld_tools.gd" id="1_d6s1y"]
+[ext_resource type="Texture2D" uid="uid://dn00rmpsgjg26" path="res://pixelmora/pickaxer.png" id="2_1seiv"]
+
+[resource]
+script = ExtResource("1_d6s1y")
+sprite = ExtResource("2_1seiv")
+position_offset = Vector2(0, -8)
+endless = true
+type = 2
+name = "Pickaxe"
