@@ -95,4 +95,3 @@ func sync_platformer_inventory(n : Node) :
 	plat_weight.text = str(n.current_weight) + "/" + str(n.weight_limit)
 	for item in n.backpack :
 		add_inventory_item(item)
-

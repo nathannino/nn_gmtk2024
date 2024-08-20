@@ -83,7 +83,7 @@ func _ready(): # https://forum.godotengine.org/t/how-to-get-all-children-from-a-
 					node.connect("add_inventory_item",add_overworld_item)
 		elif node.scene_file_path == "res://platformer/player_platformer.tscn" or node.scene_file_path == "res://Gatherer/overworld_pl.tscn" :
 			node.connect("switch_mode",set_mode)
-	# Platformer
+	#+ Platformer
 	var waiting_pl := platformer_node.get_children()
 	while not waiting_pl.is_empty():
 		var node := waiting_pl.pop_back() as Node
@@ -179,6 +179,7 @@ func _new_selection(hi) :
 
 #this should mostly be ran in platformer mode
 func add_overworld_tool(p_tool : gmtk_overworld_tool) :
+	$AudioStreamPlayer.play()
 	if overworld_inventory.has(p_tool.name) :
 		print("wtf why. " + p_tool.name + " is already in the inventory")
 		return
@@ -215,4 +216,5 @@ func sync_overworld_inventory_crafter() :
 	crafter_ui.inventory_sync(overworld_inventory)
 
 func add_recepie(rec : gmtk_crafting_recipes) :
+	$AudioStreamPlayer.play()
 	$craftermanager.add_recepie(rec)

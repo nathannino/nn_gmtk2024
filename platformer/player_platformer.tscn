@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://lay38efo5186"]
+[gd_scene load_steps=10 format=3 uid="uid://lay38efo5186"]
 
 [ext_resource type="Script" path="res://platformer/player_platformer.gd" id="1_3uwpn"]
 [ext_resource type="Resource" uid="uid://ctb5w6yx2h641" path="res://Ressources/platformer_tools/res_block.tres" id="2_myahm"]
 [ext_resource type="SpriteFrames" uid="uid://ctf00ufhnrou1" path="res://player_platformer.tres" id="3_h0t2y"]
 [ext_resource type="PackedScene" uid="uid://d2u3el8g15man" path="res://platformer/tools/pl_tool_preview.tscn" id="3_vehus"]
 [ext_resource type="Texture2D" uid="uid://byf4bliivmbyi" path="res://pixelmora/bag.png" id="5_l7kgb"]
+[ext_resource type="AudioStream" uid="uid://dibjvsudtjpj7" path="res://sounds/jump.wav" id="6_6t0g7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ouuo"]
 size = Vector2(5, 14)
@@ -48,3 +49,6 @@ texture = SubResource("GradientTexture1D_plosn")
 rotation = 3.14159
 scale = Vector2(13.8996, -0.0589227)
 texture = ExtResource("5_l7kgb")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_6t0g7")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bakq84n75ppn4"]
+[gd_scene load_steps=9 format=3 uid="uid://bakq84n75ppn4"]
 
 [ext_resource type="PackedScene" uid="uid://nhy0hme1xidi" path="res://noise.tscn" id="1_qmf0y"]
 [ext_resource type="Theme" uid="uid://bgv6yifldyofq" path="res://theme/font_smoll.tres" id="2_e2pbh"]
@@ -15,9 +15,27 @@ func _main_menu_focus() :
 func _ready():
 	_main_menu_focus()
 
+var time_to_move = false
+var timeout = 0.2
+var current_time = 0
+
+func _process(delta: float) -> void:
+	if time_to_move :
+		current_time += delta
+		if current_time > timeout :
+			get_tree().change_scene_to_file(\"res://Gatherer/resources/overworld_inventory.tscn\") # Because of course this is the root scene
+	if not one_frame_delay == -1 :
+		one_frame_delay += 1
+		if one_frame_delay == 2 : 
+			one_frame_delay = -1
+			$loading.hide()
+			$TabContainer/Engine/Label.setup_license()
+			$TabContainer.showme()
 
 func _on_start_pressed():
-	get_tree().change_scene_to_file(\"res://Gatherer/resources/overworld_inventory.tscn\") # Because of course this is the root scene
+	$mainmenu/HBoxContainer/Start.release_focus()
+	time_to_move = true
+	$mainmenu.hide()
 	pass # Replace with function body.
 
 
@@ -26,10 +44,15 @@ func _on_rebind_pressed():
 	$VBoxContainer.showme()
 	pass # Replace with function body.
 
+var one_frame_delay = -1
 
 func _on_rebind_2_pressed():
 	$mainmenu/HBoxContainer/Rebind2.release_focus()
-	$TabContainer.showme()
+	$noise.hide()
+	$loading.show()
+	$mainmenu.hide()
+	one_frame_delay = 0
+	
 	pass # Replace with function body.
 "
 
@@ -76,7 +99,6 @@ func _ready():
 		$ScrollContainer/VBoxContainer/move_right/moveright : \"ov_move_right\",
 		$ScrollContainer/VBoxContainer/move_right2/moveup : \"ov_move_up\",
 		$ScrollContainer/VBoxContainer/move_right3/movedown : \"ov_move_down\",
-		$ScrollContainer/VBoxContainer/move_right4/pause : \"pj_open_menu\",
 		$ScrollContainer/VBoxContainer/move_right5/jump : \"pl_jump\",
 		$ScrollContainer/VBoxContainer/move_right6/Inventory : \"pl_use_tool\",
 		$ScrollContainer/VBoxContainer/move_right7/use : \"pl_place\",
@@ -123,7 +145,7 @@ func _input(event):
 	if not is_visible_in_tree() :
 		return
 
-	if event.is_action_pressed(\"pj_open_menu\") :
+	if event.is_action_pressed(\"pl_cancel\") or event.is_action_pressed(\"pl_use_tool\") :
 		$\".\".hide()
 		$\"..\"._main_menu_focus()
 
@@ -144,6 +166,36 @@ func _input(event):
 			scroll.scroll_vertical -= scroll_step
 		else :
 			scroll.scroll_vertical = 0
+"
+
+[sub_resource type="GDScript" id="GDScript_6mo0y"]
+script/source = "extends Label
+
+var license_text = \"\"
+
+func setup_license() :
+	if license_text == \"\" :
+		license_text = \"\\n\\n\\nGODOT LICENSE\\n\\n\" + Engine.get_license_text()
+
+		var components = Engine.get_copyright_info()
+		license_text += \"\\n\\n\\nTHIRD PARTY LIBRARIES\\n\\n\"
+		var license_list = {}
+		var regex = RegEx.create_from_string(\"freetype|enet|mbed\")
+		for component in components:
+			var name = component.name
+			license_text += \"\\n\" + name + \"\\n\"
+			for part in component.parts:
+				license_list[part.license] = true
+				license_text += \"  License: \" + part.license + \"\\n\"
+				for line in part.copyright:
+					license_text += \"  Copyright \" + line + \"\\n\"
+
+		var licenses = Engine.get_license_info()
+		for k in licenses:
+			if license_list.has(k):
+				license_text += \"\\n\\n\\nLICENSE: \" + k + \"\\n\\n\" + licenses[k]
+		
+		text = license_text
 "
 
 [node name="MainMenu" type="Control"]
@@ -350,34 +402,9 @@ size_flags_stretch_ratio = 55.85
 [node name="movedown" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right3"]
 layout_mode = 2
 focus_neighbor_top = NodePath("../../move_right2/moveup")
-focus_neighbor_bottom = NodePath("../../move_right4/pause")
-focus_next = NodePath("../../move_right4/pause")
 focus_previous = NodePath("../../move_right2/moveup")
 button_mask = 0
 text = "Down"
-script = ExtResource("3_eyhvm")
-
-[node name="move_right4" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right4"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Pause"
-
-[node name="spacer" type="Control" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right4"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 55.85
-
-[node name="pause" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right4"]
-layout_mode = 2
-focus_neighbor_top = NodePath("../../move_right3/movedown")
-focus_neighbor_bottom = NodePath("../../move_right5/jump")
-focus_next = NodePath("../../move_right5/jump")
-focus_previous = NodePath("../../move_right3/movedown")
-button_mask = 0
-text = "Escape"
 script = ExtResource("3_eyhvm")
 
 [node name="move_right5" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
@@ -395,10 +422,8 @@ size_flags_stretch_ratio = 55.85
 
 [node name="jump" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/move_right5"]
 layout_mode = 2
-focus_neighbor_top = NodePath("../../move_right4/pause")
 focus_neighbor_bottom = NodePath("../../move_right6/Inventory")
 focus_next = NodePath("../../move_right6/Inventory")
-focus_previous = NodePath("../../move_right4/pause")
 button_mask = 0
 text = "Space"
 script = ExtResource("3_eyhvm")
@@ -551,69 +576,26 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+current_tab = 0
 script = SubResource("GDScript_861ft")
 scroll_step = 20
 
 [node name="Engine" type="ScrollContainer" parent="TabContainer"]
 layout_mode = 2
 follow_focus = true
+metadata/_tab_index = 0
 
 [node name="Label" type="Label" parent="TabContainer/Engine"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("2_e2pbh")
-text = "Copyright (c) 2014-present Godot Engine 
-  contributors.
-Copyright (c) 2007-2014 Juan Linietsky, 
-  Ariel Manzur.
-
-Permission is hereby granted, free of 
-  charge, to any person obtaining a 
-  copy
-of this software and associated 
-  documentation files (the \"Software\"), 
-  to deal
-in the Software without restriction, 
-  including without limitation the 
-  rights to use, copy, modify, merge, 
-  publish, distribute, sublicense, 
-  and/or sells
-copies of the Software, and to permit 
-  persons to whom the Software is
-furnished to do so, subject to the 
-  following conditions:
-
-The above copyright notice and this 
-  permission notice shall be included 
-  in all
-copies or substantial portions of the 
-  Software.
-
-THE SOFTWARE IS PROVIDED \"AS IS\", 
-  WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR
-IMPLIED, INCLUDING BUT NOT 
-  LIMITED TO THE WARRANTIES OF 
-  MERCHANTABILITY,
-FITNESS FOR A PARTICULAR 
-  PURPOSE AND NONINFRINGEMENT.
-  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS 
-  BE LIABLE FOR ANY CLAIM, 
-  DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION 
-  OF CONTRACT, TORT OR OTHERWISE, 
-  ARISING FROM,
-OUT OF OR IN CONNECTION WITH 
-  THE SOFTWARE OR THE USE OR 
-  OTHER DEALINGS IN THE
-SOFTWARE.
-
--- Godot Engine 
-  <https://godotengine.org>"
+autowrap_mode = 3
+script = SubResource("GDScript_6mo0y")
 
 [node name="Others" type="ScrollContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="Label" type="Label" parent="TabContainer/Others"]
 layout_mode = 2
@@ -630,8 +612,34 @@ Input remapping inspired by :
 <https://www.youtube.com/
   watch?v=FWersItLsj4>
 
-The rest is from the godot docs
+Droning from 
+<https://pixabay.com/sound-effects/
+  droning-90101/>
+The rest of the sound effects are 
+  from : <https://sfxr.me/>
+
+License screen snippet :
+<https://godotforums.org/d/
+  34833-complying-with-licenses
+  -why-only-freetype-enet-and-
+  mbed-require-attribution/9>
 "
+
+[node name="loading" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -16.0
+offset_right = 160.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "loading attributions
+please wait a while"
 
 [connection signal="pressed" from="mainmenu/HBoxContainer/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="mainmenu/HBoxContainer/Rebind" to="." method="_on_rebind_pressed"]

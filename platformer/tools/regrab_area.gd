@@ -1,14 +1,14 @@
 extends Area2D
 
 var player : CharacterBody2D
-#@export var tool_typer : gmtk_tool
+@export var tool_typer : String
 func register_player(p_player : CharacterBody2D) :
 	player = p_player
 
 func enter_body(body) :
 	if body is CharacterBody2D :
-		#print(tool_typer)
-		#player.register_current_tool_ground($"..",tool_typer)
+		print(tool_typer)
+		player.register_current_tool_ground($"..",tool_typer)
 		pass
 
 func leave_body(body) :

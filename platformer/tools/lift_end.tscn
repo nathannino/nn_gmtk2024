@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://dicq4paxognvq"]
+
+[ext_resource type="Texture2D" uid="uid://n7m6blufkc5" path="res://pixelmora/lift_beam.png" id="1_x5snd"]
+[ext_resource type="Texture2D" uid="uid://insyxh2q4v4e" path="res://pixelmora/lift_chair.png" id="2_snve7"]
+
+[sub_resource type="GDScript" id="GDScript_yyki3"]
+script/source = "extends Node2D
+
+@export var lift_node : Node2D
+signal set_active
+signal add_tooltip(n : Node2D)
+signal remove_tooltip(n : Node2D)
+
+var player_interact = false
+func _on_interact_range_body_entered(body: Node2D) -> void:
+	if body is CharacterBody2D :
+		add_tooltip.emit(lift_node)
+		player_interact = true
+	pass # Replace with function body.
+
+
+func _on_interact_range_body_exited(body: Node2D) -> void:
+	if body is CharacterBody2D :
+		remove_tooltip.emit(lift_node)
+		player_interact = false
+	pass # Replace with function body.
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed(\"cf_confirm\") :
+		if player_interact :
+			set_active.emit()
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_06guv"]
+radius = 22.0227
+
+[node name="lift_end" type="Node2D" node_paths=PackedStringArray("lift_node")]
+script = SubResource("GDScript_yyki3")
+lift_node = NodePath(".")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_x5snd")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(-1, -3)
+texture = ExtResource("2_snve7")
+
+[node name="beam_end" type="Node2D" parent="."]
+position = Vector2(1, -10)
+
+[node name="Interact_range" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interact_range"]
+position = Vector2(10, -3)
+shape = SubResource("CircleShape2D_06guv")
+
+[connection signal="body_entered" from="Interact_range" to="." method="_on_interact_range_body_entered"]
+[connection signal="body_exited" from="Interact_range" to="." method="_on_interact_range_body_exited"]

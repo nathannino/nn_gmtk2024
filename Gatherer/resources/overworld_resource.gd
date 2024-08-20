@@ -10,7 +10,7 @@ var current_life
 @export var tool : Constants.over_tool
 @export var drop : gmtk_overworld_drops
 
-var delay = float(1)
+var delay = float(0)
 var current_delay = float(0)
 
 signal add_inventory_item(type : gmtk_overworld_drops)
@@ -42,6 +42,7 @@ func tool_colided(p_tool : Constants.over_tool):
 	if current_delay > 0 :
 		return
 	# For now, I think we can assume it is the tool
+	$AudioStreamPlayer.play()
 	current_life -= 1
 	if current_life <= 0 :
 		add_inventory_item.emit(drop)

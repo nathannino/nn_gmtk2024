@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://8jnp4eg1hwfn"]
+
+[ext_resource type="PackedScene" uid="uid://nhy0hme1xidi" path="res://noise.tscn" id="1_xj0a8"]
+
+[sub_resource type="GDScript" id="GDScript_cgj2n"]
+script/source = "extends Control
+
+func _process(delta: float) -> void:
+	get_tree().change_scene_to_file(\"res://main_menu.tscn\")
+"
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_cgj2n")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -16.0
+offset_right = 160.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "loading attributions"
+
+[node name="noise" parent="." instance=ExtResource("1_xj0a8")]

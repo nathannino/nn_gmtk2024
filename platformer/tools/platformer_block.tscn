@@ -28,6 +28,7 @@ shape = SubResource("RectangleShape2D_48fik")
 
 [node name="regrab_area" type="Area2D" parent="."]
 script = ExtResource("2_ypefd")
+tool_typer = "res_block"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="regrab_area"]
 shape = SubResource("CircleShape2D_101oa")

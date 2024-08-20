@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7l5np3jb15t3"]
+
+[ext_resource type="PackedScene" uid="uid://b1cqls1mwe8lq" path="res://platformer/platformer_upgrades.tscn" id="1_883nc"]
+[ext_resource type="Resource" uid="uid://b0ulibpeyeew" path="res://Ressources/overworld_tools/pickaxe_res.tres" id="2_exn2v"]
+
+[node name="axe_unlock" type="Node2D"]
+
+[node name="platformer_upgrades" parent="." instance=ExtResource("1_883nc")]
+tool_unlock = ExtResource("2_exn2v")

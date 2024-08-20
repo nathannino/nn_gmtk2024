@@ -129,6 +129,7 @@ one_way_collision = true
 
 [node name="Regrab_area" type="Area2D" parent="."]
 script = ExtResource("2_38vsu")
+tool_typer = "ladder"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Regrab_area"]
 position = Vector2(-0.5, 42)

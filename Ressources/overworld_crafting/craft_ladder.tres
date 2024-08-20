@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="gmtk_crafting_recipes" load_steps=5 format=3 uid="uid://d0lqwdqmh5e80"]
+[gd_resource type="Resource" script_class="gmtk_crafting_recipes" load_steps=6 format=3 uid="uid://d0lqwdqmh5e80"]
 
 [ext_resource type="Script" path="res://Ressources/overworld_crafting/crafting_recipies.gd" id="1_274qa"]
+[ext_resource type="Script" path="res://Ressources/overworld_drops/overworld_resources.gd" id="1_kdvn4"]
 [ext_resource type="Resource" uid="uid://c1clq66t6k1v2" path="res://Ressources/overworld_drops/wood.tres" id="1_wg3ut"]
 [ext_resource type="Resource" uid="uid://ddxpjesix4eoa" path="res://Ressources/platformer_tools/ladder.tres" id="2_7pcke"]
 [ext_resource type="Resource" uid="uid://cc55b31pnbyh3" path="res://Ressources/overworld_drops/rope.tres" id="2_m6wl5"]
@@ -8,4 +9,4 @@
 [resource]
 script = ExtResource("1_274qa")
 result = ExtResource("2_7pcke")
-components = Array[Resource("res://Ressources/overworld_drops/overworld_resources.gd")]([ExtResource("1_wg3ut"), ExtResource("2_m6wl5")])
+components = Array[ExtResource("1_kdvn4")]([ExtResource("1_wg3ut"), ExtResource("2_m6wl5")])

@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://b1fwr2bkqvkqk"]
+[gd_scene load_steps=11 format=3 uid="uid://b1fwr2bkqvkqk"]
 
 [ext_resource type="Texture2D" uid="uid://b3akvces4ys1g" path="res://Intro/LogoN_Gray .png" id="1_8f75y"]
 [ext_resource type="PackedScene" uid="uid://bakq84n75ppn4" path="res://main_menu.tscn" id="1_k2ti8"]
 [ext_resource type="Texture2D" uid="uid://dwi1gg00edex8" path="res://Intro/CircleClassic_Gray.png" id="2_qo017"]
 [ext_resource type="Texture2D" uid="uid://4a1o1dudean5" path="res://pixelmora/logo.png" id="3_5ec67"]
 [ext_resource type="PackedScene" uid="uid://nhy0hme1xidi" path="res://noise.tscn" id="4_3ng7j"]
+[ext_resource type="AudioStream" uid="uid://bgbn2gn50ta3x" path="res://sounds/droning.wav" id="6_buby0"]
 
 [sub_resource type="GDScript" id="GDScript_h0j5g"]
 script/source = "extends Node2D
@@ -35,6 +36,10 @@ func _process(delta):
 			$noise.show()
 			$blackout.hide()
 			$logoold.show()
+			$constant_drone.play()
+			var drone_sound = $constant_drone
+			remove_child(drone_sound)
+			get_tree().root.add_child(drone_sound)
 			delaytwodown = true
 	
 	if current_delay >= delaythree :
@@ -100,3 +105,6 @@ texture = SubResource("GradientTexture2D_p7tsi")
 
 [node name="noise" parent="." instance=ExtResource("4_3ng7j")]
 visible = false
+
+[node name="constant_drone" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_buby0")

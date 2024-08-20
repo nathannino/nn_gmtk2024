@@ -52,6 +52,7 @@ func _physics_process(delta):
 	# Handle jump.
 	if Input.is_action_just_pressed("pl_jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		$AudioStreamPlayer.play()
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -78,10 +79,10 @@ func _physics_process(delta):
 
 var current_tool_ground : Node2D
 var current_tool_res : gmtk_tool
-func register_current_tool_ground(n : Node2D, toll : gmtk_tool) :
+func register_current_tool_ground(n : Node2D, toll : String) :
 	$Sprite2D2.show()
 	current_tool_ground = n
-	current_tool_res = toll.duplicate()
+	current_tool_res = load("res://Ressources/platformer_tools/" + toll + ".tres")
 
 func deregister_current_tool_ground(n : Node2D) :
 	if current_tool_ground == n :

@@ -31,6 +31,7 @@ polygon = PackedVector2Array(3, -48, -1, -43, -1, 43, 3, 48)
 
 [node name="regrab_area" type="Area2D" parent="."]
 script = ExtResource("2_tqo76")
+tool_typer = "bridge"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="regrab_area"]
 position = Vector2(3, 0)
